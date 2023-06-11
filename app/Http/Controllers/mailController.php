@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\bemMail;
@@ -9,22 +10,32 @@ use Illuminate\Support\Facades\Validator;
 
 class mailController extends Controller
 {
-    public function sendMail(Request $request){
+    protected $mailService;
+
+    public function __construct()
+    {
+        $this->mailService = new MailService();
+    }
+    public function sendOPRecMail(Request $request){
         $rules = [
             'subject'=>'required',
             'to'=>'required|email',
             'message'=>'required',
-            'file' => 'optional|string',
+            // 'tanggal'=>'required',
+            // 'jam'=>'required',
+            // 'name'=>'required',
         ];
         $errorMsg = [
             'subject.required'=>'Subject is required!',
             'to.required'=>'Address To is required!',
             'to.email'=>'Address To must be a valid email address!',
             'message.required'=>'Message is required!',
-            'file.string'=>'Wrong file configuration!',
+            // 'tanggal.required'=>'Tanggal is required!',
+            // 'jam.required'=>'Jam is required!',
+            // 'name.required'=>'Name is required!',
         ];
 
-        $data = $request->only(['subject','to','message','file']);
+        $data = $request->only(['subject','to','message','tanggal','jam','name']);
 
         $validator = Validator::make($data,$rules,$errorMsg);
 
@@ -35,13 +46,7 @@ class mailController extends Controller
                 'message'=>$validator->errors()->first()
             ]);
         }else{
-            $mail = new bemMail($data);
-            Mail::to($data['to'])->send($mail);
-            return response()->json([
-                'status'=>'success',
-                'code'=>200,
-                'message'=>'Email sent successfully!'
-            ]); 
+            return $this->mailService->sendMail($data);
         }
     }
 }

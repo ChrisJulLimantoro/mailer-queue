@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post("/send",[mailController::class,'sendMail']);
+Route::post("/send",[mailController::class,'sendOPRecMail']);

@@ -137,7 +137,7 @@
                 </p>
                 <p>
                     Gimana kabarnya nihh!!<br>
-                    Kita dari BEM punya kabar baikk nihh!!
+                    Kita dari BEM punya kabar baikk nihh 😎🥰!!
                 </p>
                 
                 @yield('content')
